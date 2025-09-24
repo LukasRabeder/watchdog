@@ -13,7 +13,7 @@ This is a testproject.
 
 ## How to test
 
-Not sure yet
+Test.
 
 ## External hardware
 
