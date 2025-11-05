@@ -1,16 +1,15 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-
+use work.watchdog_pkg.all;
 entity param_loader is
-    generic ( W : integer := 16 );
     port 
     (
         clk, rst_n : in std_ulogic;
-        in_data    : in std_ulogic_vector(W-1 downto 0);
+        in_data    : in word_t;
         in_valid   : in std_ulogic;
         in_ready   : out std_ulogic;
-        a0, a1     : out std_ulogic_vector(W-1 downto 0);
+        a0, a1     : out word_t;
         start_calc : out std_ulogic;
         core_busy  : in std_ulogic
     );
@@ -19,7 +18,7 @@ end entity param_loader;
 architecture rtl of param_loader is
     type state_type is (S_IDLE, S_GOT_A0, S_CORE_BUSY, S_PULSE_START);
     signal state : state_type := S_IDLE;
-    signal a0_reg, a1_reg : std_ulogic_vector(W-1 downto 0) := (others => '0');
+    signal a0_reg, a1_reg : word_t := (others => '0');
     signal start_q, ready_q : std_ulogic := '0';
     signal take_new_data : std_ulogic;
 begin
@@ -28,7 +27,7 @@ begin
 
     in_ready <= ready_q;
     start_calc <= start_q;
-    take_new_data <= start_q and ready_q;
+    take_new_data <= in_valid and ready_q;
 
     process(clk, rst_n)
     begin
