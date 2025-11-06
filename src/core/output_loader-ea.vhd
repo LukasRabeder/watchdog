@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-use work.watchdog_pkg.all;
+use work.eig_core_pkg.all;
 
 entity output_loader is
     port
