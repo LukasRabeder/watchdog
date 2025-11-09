@@ -4,19 +4,20 @@ use ieee.numeric_std.all;
 use ieee.math_real.all;
 use work.eig_core_pkg.all;
 entity regFF_pair is
+    generic (W : integer := 32);
     port 
     (
-        clk, rst_n : in std_ulogic;
-        clk_en     : in std_ulogic;
-        a0_in       : in word_t;
-        a1_in       : in word_t;
-        a0_out      : out word_t;
-        a1_out      : out word_t
+        clk, rst_n : in std_logic;
+        clk_en     : in std_logic;
+        a0_in       : in std_logic_vector(W-1 downto 0);
+        a1_in       : in std_logic_vector(W-1 downto 0);
+        a0_out      : out std_logic_vector(W-1 downto 0);
+        a1_out      : out std_logic_vector(W-1 downto 0)
     );
 end entity regFF_pair;
 
 architecture rtl of regFF_pair is
-    signal a0_reg, a1_reg : word_t := (others => '0');
+    signal a0_reg, a1_reg : std_logic_vector(W-1 downto 0) := (others => '0');
     begin
         process(clk, rst_n)
         begin

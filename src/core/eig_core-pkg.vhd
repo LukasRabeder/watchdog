@@ -3,20 +3,22 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 package eig_core_pkg is
-    function saturate(input : signed; target_width : integer) return std_ulogic_vector;
+    function saturate(input : signed; target_width : integer) return std_logic_vector;
 
-    function or_reduce(v : std_ulogic_vector) return std_ulogic;
-    function and_reduce(v : std_ulogic_vector) return std_ulogic;
+    function or_reduce(v : std_logic_vector) return std_ulogic;
+    function and_reduce(v : std_logic_vector) return std_ulogic;
 
     function even_up(x : integer) return integer;
 
     function msb_pos(x : unsigned) return integer;
 
+    function sel_nibble32(word : std_logic_vector(31 downto 0); idx : integer) return std_logic_vector;
+
 end package eig_core_pkg;
 
 package body eig_core_pkg is
 
-        function saturate(input : signed; target_width : integer) return std_ulogic_vector is
+        function saturate(input : signed; target_width : integer) return std_logic_vector is
         variable result : signed(target_width-1 downto 0) := (others => '0');
         begin
             if input'high < target_width-1 then
@@ -42,8 +44,8 @@ package body eig_core_pkg is
         end function saturate;
 
 
-        function or_reduce(v : std_ulogic_vector) return std_ulogic is
-        variable result : std_ulogic := '0';
+        function or_reduce(v : std_logic_vector) return std_logic is
+        variable result : std_logic := '0';
         begin
             for i in v'range loop
                 if v(i) = '1' then
@@ -52,7 +54,7 @@ package body eig_core_pkg is
             end loop;
             return result;
         end function or_reduce;
-        function and_reduce(v : std_ulogic_vector) return std_ulogic is
+        function and_reduce(v : std_logic_vector) return std_logic is
         variable result : std_ulogic := '1';
         begin
             for i in v'range loop
@@ -81,5 +83,12 @@ package body eig_core_pkg is
             end loop;
             return -1; -- falls alle Bits 0 sind
         end function msb_pos;
+
+        function sel_nibble32(word : std_logic_vector(31 downto 0); idx : integer) 
+        return std_logic_vector is
+            variable lo : integer := (idx*4);
+        begin
+            return word(31-lo downto 28-lo);
+        end function;
 
 end package body eig_core_pkg;

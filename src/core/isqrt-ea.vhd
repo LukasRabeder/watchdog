@@ -8,13 +8,13 @@ entity cordic_sqrt is
     OUT_WIDTH : integer := IN_WIDTH/2     -- 16 bei 32 Bit
   );
   port (
-    clk    : in  std_ulogic;
-    rst_n  : in  std_ulogic;
-    start  : in  std_ulogic;
+    clk    : in  std_logic;
+    rst_n  : in  std_logic;
+    start  : in  std_logic;
     x_in   : in  signed(IN_WIDTH-1 downto 0);
     y_out  : out unsigned(OUT_WIDTH-1 downto 0); -- floor(sqrt(|x|))
-    done   : out std_ulogic;
-    is_neg : out std_ulogic               -- '1' wenn x_in < 0
+    done   : out std_logic;
+    is_neg : out std_logic               -- '1' wenn x_in < 0
   );
 end entity;
 
@@ -24,7 +24,7 @@ architecture rtl of cordic_sqrt is
   signal st : state_t;
 
   -- Arbeitsregister
-  signal neg_flag : std_ulogic;
+  signal neg_flag : std_logic;
   signal radicand : unsigned(IN_WIDTH-1 downto 0);     -- |x_in|
   signal shreg    : unsigned(IN_WIDTH-1 downto 0);     -- zum paarweisen Auslesen (MSB->LSB)
   signal remind      : unsigned(OUT_WIDTH*2-1 downto 0);  -- Rest-Accumulator (Breite: 2*OUT)

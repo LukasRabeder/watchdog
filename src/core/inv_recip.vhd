@@ -8,12 +8,12 @@ entity inv_recip is
     F : integer := 16  -- fractional bits (QF)
   );
   port(
-    clk, rst_n : in  std_ulogic;
-    start_calc : in  std_ulogic;
-    done       : out std_ulogic;
+    clk, rst_n : in  std_logic;
+    start_calc : in  std_logic;
+    done       : out std_logic;
     x_in       : in  signed(W-1 downto 0);   -- QF, erwartet x>0
     x_inv      : out unsigned(W-1 downto 0); -- QF, approx 1/x_in
-    invalid    : out std_ulogic              -- '1' wenn x<=0
+    invalid    : out std_logic              -- '1' wenn x<=0
   );
 end;
 

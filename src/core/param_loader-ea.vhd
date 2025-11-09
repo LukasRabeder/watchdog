@@ -5,11 +5,11 @@ use work.eig_core_pkg.all;
 entity param_loader is
     port 
     (
-        clk, rst_n            : in std_ulogic;
-        in_pins1, in_pins2    : in std_ulogic_vector(7 downto 0);
+        clk, rst_n            : in std_logic;
+        in_pins1, in_pins2    : in std_logic_vector(7 downto 0);
         a0, a1                : out signed(31 downto 0);
-        start_calc            : out std_ulogic;
-        core_busy             : in std_ulogic
+        start_calc            : out std_logic;
+        core_busy             : in std_logic
     );
 end entity param_loader;
 
@@ -17,8 +17,8 @@ architecture rtl of param_loader is
     type state_type is (S_IDLE, S_GOT_DATA, S_CORE_BUSY);
     signal state : state_type := S_IDLE;
     signal a0_reg, a1_reg : signed(31 downto 0) := (others => '0');
-    signal start_q : std_ulogic := '0';
-    signal ready_q : std_ulogic := '0';
+    signal start_q : std_logic := '0';
+    signal ready_q : std_logic := '0';
 begin
     a0 <= a0_reg;
     a1 <= a1_reg;

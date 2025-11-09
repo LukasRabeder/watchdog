@@ -11,9 +11,9 @@ entity disc_core_ is
     );
     port
     (
-        clk, rst_n      : in std_ulogic;
-        start_calc      : in std_ulogic;
-        done            : out std_ulogic;
+        clk, rst_n      : in std_logic;
+        start_calc      : in std_logic;
+        done            : out std_logic;
         a0, a1          : in signed(W-1 downto 0);
 
         disc            : out signed(W-1 downto 0)

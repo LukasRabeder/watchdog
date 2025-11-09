@@ -4,72 +4,87 @@ use ieee.numeric_std.all;
 use work.eig_core_pkg.all;
 
 architecture rtl of watchdog is
-    signal clk_i       : std_ulogic;
-    signal rst_n_i     : std_ulogic;
-    signal ui_in_i     : std_ulogic_vector(7 downto 0);
-    signal uio_i     : std_ulogic_vector(7 downto 0);
-    signal uo_out_i    : std_ulogic_vector(7 downto 0);
+    signal clk_i                 : std_logic;
+    signal rst_n_i               : std_logic;
+    signal ui_in_i               : std_logic_vector(7 downto 0);
+    signal uio_i                 : std_logic_vector(7 downto 0);
+    signal uo_out_i              : std_logic_vector(7 downto 0);
 
-    signal handshake_s : std_ulogic := '0';
-    signal data      : std_ulogic_vector(15 downto 0) := (others => '0');
-    signal data_dummy : std_ulogic_vector(15 downto 0) := (others => '0');
-    signal rdy       : std_ulogic  := '0';
-    signal busy   : std_ulogic  := '0';
+    -- Handshakes
+    signal core_busy             : std_logic := '0';
+    signal res_valid             : std_logic := '0';  -- 1-Takt-Puls: Ergebnisse fertig
+    signal ol_busy               : std_logic := '0';
+    signal start_ol              : std_logic := '0';
+    signal eig_core_start        : std_logic := '0';
+
+    -- Daten
+    signal alpha, beta           : signed(31 downto 0) := (others=>'0');
+
+    signal kappa, omega, omega0  : signed(31 downto 0) := (others=>'0');
+    signal invK, K               : signed(31 downto 0) := (others=>'0');
+
+    signal neg_h_b               : signed(31 downto 0) := (others=>'0');
+    signal sq_h_disc             : signed(31 downto 0) := (others=>'0');
+    signal regime                : std_logic_vector(2 downto 0);
 
     begin
     
     clk_i <= clk;
     rst_n_i <= rst_n;
-    ui_in_i <= ui_in;
-    uio_i <= uio;
-    uo_out <= uo_out_i;
-    
-  ---------------------------------------------------------------------------
-  -- PARAM_LOADER: liest Eingaben (ui_in/uio) und liefert X + valid
-  -- HINWEIS: Passe die Portnamen an deine echte Entity an (param_loader-ea.vhd).
-  ---------------------------------------------------------------------------
-  u_pl : entity work.param_loader
-    port map (
-        clk         => clk_i,
-        rst_n       => rst_n_i,
-        in_data     => ui_in_i,
-        in_valid    => '1',  -- Annahme: Immer valide Daten
-        in_ready    => rdy,
-        a0          => data,
-        a1          => data_dummy,
-        start_calc  => handshake_s,
-        core_busy   => busy
+    ui_in_i <= std_logic_vector(ui_in);
+    uio_i <= std_logic_vector(uio);
+    uo_out <= std_logic_vector(uo_out_i);
+    u_pl : entity work.param_loader
+    port map 
+    (
+        clk            => clk_i,
+        rst_n          => rst_n,
+        in_pins1       => ui_in_i,
+        in_pins2       => uio_i,
+        a0             => alpha,
+        a1             => beta,
+        core_busy      => core_busy,
+        start_calc     => eig_core_start
     );
 
-    ---------------------------------------------------------------------------
-  -- CORE: rechnet Quadratwurzel aus uin
-  -- HANDSHAKE
-  ---------------------------------------------------------------------------
-    u_core : entity work.isqrt
+    u_core : entity work.eig_core
     port map
     (
-        clk         => clk_i,
-        rst_n       => rst_n_i,
-        start       => handshake_s,
-        din         => data,
-        dout        => uo_out_i,
-        done        => handshake_s
+        clk            => clk_i,
+        rst_n          => rst_n_i,
+        data_rdy       => '1',
+        a0             => alpha,
+        a1             => beta,
+        core_busy      => core_busy,
+        omega          => omega,
+        kappa          => kappa,
+        neg_beta_h     => neg_h_b,
+        sqrt_disc_half => sq_h_disc,
+        regime         => regime
     );
-      ---------------------------------------------------------------------------
-  -- OUTPUT LOADER: sendet Ergebnis (uo_out) wenn bereit
-  ---------------------------------------------------------------------------
+    inv_ : entity work.inv_recip
+     generic map
+     (
+        W => 32,
+        F => 16
+     )
+     port map(
+        clk => clk,
+        rst_n => rst_n,
+        start_calc => res_valid,
+        x_in => kappa,
+        done => start_ol,
+        x_inv => unsigned(invK)        
+    );
     u_ol : entity work.output_loader
     port map (
-        clk             => clk_i,
-        rst_n           => rst_n_i,
-        core_done       => handshake_s,
-        lam0_re_in     => data,
-        lam0_im_in     => data_dummy,
-        lam1_re_in     => data_dummy,
-        lam1_im_in     => data_dummy,
-        out_ready       => rdy,
-        out_data        => uo_out_i,
-        out_valid       => '1',
-        core_busy_out   => busy
+        clk            => clk_i,
+        rst_n          => rst_n_i,
+        start          => start_ol,
+        mode           => regime,
+        wordA          => std_logic_vector(kappa),
+        wordB          => std_logic_vector(invK),
+        busy           => ol_busy,
+        out_byte       => uo_out_i
     );
 end architecture rtl;

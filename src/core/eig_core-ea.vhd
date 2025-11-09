@@ -7,27 +7,27 @@ entity eig_core is
 
     port
     (
-        clk, rst_n      : in std_ulogic;
-        data_rdy        : in std_ulogic;
+        clk, rst_n      : in std_logic;
+        data_rdy        : in std_logic;
         a0, a1          : in signed(31 downto 0);
-        core_busy       : out std_ulogic;
+        core_busy       : out std_logic;
         omega           : out signed(31 downto 0);
         kappa           : out signed(31 downto 0);
         neg_beta_h      : out signed(31 downto 0);
         sqrt_disc_half  : out signed(31 downto 0);
-        regime          : out std_ulogic_vector(1 downto 0) --100: overdamoed, 010: critical, 001:underdamped
+        regime          : out std_logic_vector(2 downto 0) --100: overdamoed, 010: critical, 001:underdamped
     );
 end entity eig_core;
 
 architecture rtl of eig_core is
     signal alpha, beta : signed(31 downto 0) := (others => '0');
     signal start_calc : std_ulogic := '0';
-    signal disc_neg : std_ulogic := '0';
-    signal sqrt_done : std_ulogic := '0';
-    signal disc_rdy : std_ulogic := '0';
+    signal disc_neg : std_logic := '0';
+    signal sqrt_done : std_logic := '0';
+    signal disc_rdy : std_logic := '0';
     
-    signal calc_done_q : std_ulogic := '0';
-    signal regime_q : std_ulogic_vector(1 downto 0) := (others => '0');
+    signal calc_done_q : std_logic := '0';
+    signal regime_q : std_logic_vector(2 downto 0) := (others => '0');
     signal alpha4, beta_sq, disc_q : signed(63 downto 0) := (others => '0');
     signal alpha_q, beta_q, omega_q, kappa_q, neg_beta_h_q, sqrt_disc_half_q : signed(31 downto 0) := (others => '0');
 
