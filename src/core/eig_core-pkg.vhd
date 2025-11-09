@@ -3,39 +3,44 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 package eig_core_pkg is
-    -- datatypes
-    subtype word_t  is std_ulogic_vector(15 downto 0);  -- 16 Bit Wort
-    subtype signed_t is signed(15 downto 0);            -- 16 Bit signed
-    subtype frac_t  is signed(23 downto 0);             -- 24 Bit Fractional
-    subtype imag_t  is std_ulogic_vector(7 downto 0);   -- 8 Bit Imaginary Output
-
-    function frac_to_word(x : frac_t) return word_t;
-    function word_to_frac(v : word_t) return frac_t;
+    function saturate(input : signed; target_width : integer) return std_ulogic_vector;
 
     function or_reduce(v : std_ulogic_vector) return std_ulogic;
     function and_reduce(v : std_ulogic_vector) return std_ulogic;
 
     function even_up(x : integer) return integer;
 
+    function msb_pos(x : unsigned) return integer;
+
 end package eig_core_pkg;
 
 package body eig_core_pkg is
 
-    function frac_to_word(x : frac_t) return word_t is
-        variable resized : signed(15 downto 0);
+        function saturate(input : signed; target_width : integer) return std_ulogic_vector is
+        variable result : signed(target_width-1 downto 0) := (others => '0');
         begin
-            resized := resize(x, 16);
-            return std_ulogic_vector(resized);
-        end function frac_to_word;
+            if input'high < target_width-1 then
+                result := resize(input, target_width);
+            else
+                if input(input'high) = '0' then
+                    if or_reduce(std_logic_vector(input(input'high downto target_width))) = '1' then
+                        result := (others => '1');
+                        result(target_width-1) := '0';
+                    else
+                        result := resize(input, target_width);
+                    end if;
+                else
+                    if and_reduce(std_logic_vector(not input(input'high downto target_width))) = '0' then
+                        result := (others => '0');
+                        result(target_width-1) := '1';
+                    else
+                        result := resize(input, target_width);
+                    end if;
+                end if;
+            end if;
+            return std_logic_vector(result);
+        end function saturate;
 
-    function word_to_frac(v : word_t) return frac_t is
-        variable signed_v : signed(15 downto 0);
-        variable result : frac_t;
-        begin 
-            signed_v := signed(v);
-            result := resize(signed_v, 24);
-            return result;
-        end function word_to_frac;
 
         function or_reduce(v : std_ulogic_vector) return std_ulogic is
         variable result : std_ulogic := '0';
@@ -66,5 +71,15 @@ package body eig_core_pkg is
                     return x + 1;
                 end if;
             end function even_up;
+        
+        function msb_pos(x : unsigned) return integer is
+        begin   
+            for i in x'range loop
+                if x(x'length - 1 - i) = '1' then
+                    return x'length - 1 - i;
+                end if;
+            end loop;
+            return -1; -- falls alle Bits 0 sind
+        end function msb_pos;
 
 end package body eig_core_pkg;

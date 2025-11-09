@@ -5,29 +5,26 @@ use work.eig_core_pkg.all;
 entity param_loader is
     port 
     (
-        clk, rst_n : in std_ulogic;
-        in_data    : in word_t;
-        in_valid   : in std_ulogic;
-        in_ready   : out std_ulogic;
-        a0, a1     : out word_t;
-        start_calc : out std_ulogic;
-        core_busy  : in std_ulogic
+        clk, rst_n            : in std_ulogic;
+        in_pins1, in_pins2    : in std_ulogic_vector(7 downto 0);
+        a0, a1                : out signed(31 downto 0);
+        start_calc            : out std_ulogic;
+        core_busy             : in std_ulogic
     );
 end entity param_loader;
 
 architecture rtl of param_loader is
-    type state_type is (S_IDLE, S_GOT_A0, S_CORE_BUSY, S_PULSE_START);
+    type state_type is (S_IDLE, S_GOT_DATA, S_CORE_BUSY);
     signal state : state_type := S_IDLE;
-    signal a0_reg, a1_reg : word_t := (others => '0');
-    signal start_q, ready_q : std_ulogic := '0';
-    signal take_new_data : std_ulogic;
+    signal a0_reg, a1_reg : signed(31 downto 0) := (others => '0');
+    signal start_q : std_ulogic := '0';
+    signal ready_q : std_ulogic := '0';
 begin
     a0 <= a0_reg;
     a1 <= a1_reg;
 
-    in_ready <= ready_q;
-    start_calc <= start_q;
-    take_new_data <= in_valid and ready_q;
+    start_calc <= ready_q;
+    start_q <= not core_busy;
 
     process(clk, rst_n)
     begin
@@ -36,36 +33,29 @@ begin
             a0_reg <= (others => '0');
             a1_reg <= (others => '0');
             start_q <= '0';
-            ready_q <= '1';
+            ready_q <= '0';
         elsif rising_edge(clk) then
             start_q <= '0';
+            ready_q <= '0';
             case state is
                 when S_IDLE =>
-                    ready_q <= not core_busy;
+                    start_q <= not core_busy;
                     
-                    if take_new_data = '1' then
-                        a0_reg <= in_data;
-                        state <= S_GOT_A0;
+                    if start_q = '1' then
+                        a0_reg <= signed('0' & in_pins1);
+                        a1_reg <= signed('0' & in_pins2);
+                        state <= S_GOT_DATA;
                     end if;
 
-                when S_GOT_A0 =>
+                when S_GOT_DATA =>
                     ready_q <= '1';
-                    if take_new_data = '1' then
-                        a1_reg <= in_data;
-                        state <= S_PULSE_START;
-                        ready_q <= '0';
-                    end if;
-
-                when S_PULSE_START =>
-                    start_q <= '1';
-                    ready_q <= '0';
                     state <= S_CORE_BUSY;
 
                 when S_CORE_BUSY =>
-                    ready_q <= '0';
-                    if core_busy = '0' then
+                    start_q <= not core_busy;
+                    if start_q = '1' then
                         state <= S_IDLE;
-                        ready_q <= '1';
+                        ready_q <= '0';
                     end if;
             end case;
         end if;
