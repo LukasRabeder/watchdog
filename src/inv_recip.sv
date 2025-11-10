@@ -53,8 +53,9 @@ module inv_recip #(
     integer result = 0;
     begin
       for (int i = 0; i < W; i++) begin
-        if (u[W-1 - i] == 1'b1) begin
-          result <= W-1 - i;
+        if (u[W-1 - i] == 1'b1) 
+        begin
+          result = W-1 - i;
           return result;
         end
       end
