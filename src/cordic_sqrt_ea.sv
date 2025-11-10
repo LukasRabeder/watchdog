@@ -18,7 +18,7 @@ module cordic_sqrt #(
 
   // Registers
   logic neg_flag;
-  logic [IN_WIDTH-1:0] radicand;
+  //logic [IN_WIDTH-1:0] radicand;
   logic [IN_WIDTH-1:0] shreg;
   logic [1:0] bring2 = shreg[IN_WIDTH-1:IN_WIDTH-2];
   logic [OUT_WIDTH*2-1:0] remind;
@@ -38,7 +38,7 @@ module cordic_sqrt #(
     if (!rst_n) begin
       st       <= IDLE;
       neg_flag <= 1'b0;
-      radicand <= '0;
+      //radicand <= '0;
       shreg    <= '0;
       remind   <= '0;
       root     <= '0;
@@ -50,10 +50,10 @@ module cordic_sqrt #(
             // Calculate absolute value and set negative flag
             if (x_in[IN_WIDTH-1] == 1'b1) begin
               neg_flag <= 1'b1;
-              radicand <= '0; // we calculate 0 and flag it
+              //radicand <= '0; // we calculate 0 and flag it
             end else begin
               neg_flag <= 1'b0;
-              radicand <= unsigned'(x_in);
+              //radicand <= unsigned'(x_in);
             end
 
             shreg <= (x_in[IN_WIDTH-1] == 1'b0) ? unsigned'(x_in) : '0;
@@ -95,6 +95,7 @@ module cordic_sqrt #(
           // One clock cycle 'done', then return to IDLE
           st <= IDLE;
         end
+        default: st <= IDLE;
       endcase
     end
   end

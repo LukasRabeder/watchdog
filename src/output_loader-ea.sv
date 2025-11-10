@@ -20,7 +20,7 @@ module output_loader #(
     logic [W-1:0] shift_reg;
     integer nibble_idx; // integer range 0 to 7
     logic [2:0] cur_mode;
-    logic data_rdy;
+    //logic data_rdy;
 
     assign busy = (state != IDLE) ? 1'b1 : 1'b0;
 
@@ -46,18 +46,18 @@ module output_loader #(
             state <= IDLE;
             nibble_idx <= 0;
             cur_mode <= 3'b000;
-            data_rdy <= 1'b0;
+            //data_rdy <= 1'b0;
             out_byte <= 8'b0;
             shift_reg <= {W{1'b0}};
         end else if (ena) begin
             case (state)
                 IDLE: begin
-                    data_rdy <= 1'b0;
+                    //data_rdy <= 1'b0;
                     if (start) begin
                         cur_mode <= mode;
                         shift_reg <= wordA;
                         nibble_idx <= 7;
-                        data_rdy <= 1'b1;
+                        //data_rdy <= 1'b1;
                         state <= SEND_A;
                     end
                 end
@@ -74,7 +74,7 @@ module output_loader #(
                 SEND_B: begin
                     out_byte <= {cur_mode, 1'b1, sel_nibble32(shift_reg, nibble_idx)};
                     if (nibble_idx == 0) begin
-                        data_rdy <= 1'b0;
+                        //data_rdy <= 1'b0;
                         out_byte <= 8'b0;
                         state <= IDLE;
                     end else begin

@@ -44,7 +44,7 @@ end
   integer signed e = 0;
 
   logic [W-1:0] y;       // QF, iterative reciprocal
-  integer idx = 0;
+  //integer idx = 0;
   integer s = 0;
 
   // Width for QF*QF
@@ -99,7 +99,7 @@ end
       x_norm<= '0;
       e     <= 0;
       y     <= '0;
-      idx   <= 0;
+      //idx   <= 0;
     end 
     else 
     begin
@@ -152,7 +152,7 @@ end
 
         S_LUT: 
         begin
-          idx <= x_norm[W-1:W-4];        // upper Nibble
+          //idx <= x_norm[W-1:W-4];        // upper Nibble
           y   <= inv_lut;
           st  <= S_IT0;
         end

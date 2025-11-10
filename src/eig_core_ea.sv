@@ -16,7 +16,7 @@ module eig_core (
     logic signed [31:0] alpha, beta;
     logic start_calc;
     logic disc_neg;
-    logic data_rdy_;
+    //logic data_rdy_;
 
     // Handshake signals for cordic_sqrt
     logic sqrt_start;
@@ -25,12 +25,12 @@ module eig_core (
     // Handshake signals for inv_recip
     logic inv_start;
     logic inv_done;
-    logic invalid;
+    //logic invalid;
 
     logic calc_done_q;
     logic [2:0] regime_q;
     logic signed [63:0] alpha4, beta_sq, disc_q;
-    logic signed [31:0] alpha_q, beta_q, omega_q, kappa_q, inv_kappa_q, neg_beta_h_q, sqrt_disc_half_q;
+    logic signed [31:0] kappa_q, inv_kappa_q, sqrt_disc_half_q;
 
     typedef enum logic [3:0] {IDLE, PREP_DISC, CALC_DISC, WAIT_SQRT, CALC_INV, DONE} state_type;
     state_type state;
@@ -59,8 +59,8 @@ module eig_core (
         .start_calc(inv_start),
         .x_in(kappa_q),
         .x_inv(inv_kappa_q),
-        .done(inv_done),
-        .invalid(invalid)
+        .done(inv_done)
+        //.invalid(invalid)
     );
 
     assign core_busy = ~calc_done_q;
@@ -77,12 +77,12 @@ module eig_core (
             calc_done_q <= 1'b0;
             start_calc <= 1'b0;
             regime_q <= 3'b000;
-            alpha_q <= 32'b0;
-            beta_q <= 32'b0;
-            omega_q <= 32'b0;
+            //alpha_q <= 32'b0;
+            //beta_q <= 32'b0;
+            //omega_q <= 32'b0;
             kappa_q <= 32'b0;
             //inv_kappa_q <= 32'b0;
-            neg_beta_h_q <= 32'b0;
+            //neg_beta_h_q <= 32'b0;
             //sqrt_disc_half_q <= 32'b0;
             disc_neg <= 1'b0;
 
@@ -106,7 +106,7 @@ module eig_core (
                     end
                 end
                 PREP_DISC: begin
-                    data_rdy_ <= 1'b0;
+                    //data_rdy_ <= 1'b0;
                     alpha4 <= alpha << 2; // alpha * 4
                     beta_sq <= $signed($unsigned(beta) * $unsigned(beta));
                     if (alpha4 < beta_sq) begin
@@ -126,7 +126,7 @@ module eig_core (
                     if (sqrt_done) begin
                         sqrt_start <= 1'b0; // Deassert sqrt_start
                         //sqrt_disc_half_q <= sqrt_disc_half_q >> 1; // sqrt(disc)/2
-                        neg_beta_h_q <= -beta >>> 1; // -beta/2
+                        //neg_beta_h_q <= -beta >>> 1; // -beta/2
 
                         // Calculate kappa based on regime
                         if (regime_q == 3'b010) 
