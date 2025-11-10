@@ -47,7 +47,7 @@ module inv_recip #(
   localparam M = 2*W;
   logic [M-1:0] xy;
   logic [M-1:0] yc;
-
+  logic [W-1:0] tmpQF;
   // Function to find MSB position
   function integer msb_pos(logic [W-1:0] u);
     integer result = 0;
@@ -125,7 +125,7 @@ module inv_recip #(
         S_IT0, S_IT1, S_IT2, S_IT3: begin
           xy <= x_norm * y;           // QF*QF
           // (x*y)>>F  -> again QF
-          assign tmpQF = xy >> F;
+          tmpQF <= xy >> F;
           // corr = 2 - x*y
           yc <= y * (TWO_QF - tmpQF);   // QF*QF
           y  <= yc >> F; // back to QF
