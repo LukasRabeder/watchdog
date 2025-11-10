@@ -1,4 +1,5 @@
-module param_loader (
+module param_loader 
+(
     input  logic clk,
     input  logic rst_n,
     input  logic [7:0] in_pins1,

@@ -14,7 +14,7 @@ module tt_um_watchdog (
     logic [7:0] uo_out_i;
 
     // Handshake signals
-    logic core_busy;
+    logic core_busy_;
     logic res_valid;  // 1-cycle pulse: results ready
     logic ol_busy;
     logic start_ol;
@@ -50,7 +50,7 @@ module tt_um_watchdog (
         .data_rdy(1'b1),    //data_rdy immer true, durch datenvalidierung im Param Loader
         .a0(alpha),
         .a1(beta),
-        .core_busy(core_busy),
+        .core_busy(core_bus_),
         .kappa(K),
         .inv_kappa(invK),
         .regime(regime)
