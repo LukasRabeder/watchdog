@@ -60,7 +60,6 @@ module param_loader
                     a1 <= 32'b0;
                     start_calc <= 1'b0;
                 end
-                default: state <= S_IDLE;
             endcase
         end
     end
