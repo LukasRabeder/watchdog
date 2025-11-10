@@ -53,12 +53,12 @@ always_ff @(posedge clk or negedge rst_n) begin
     param_loader u_pl 
     (
         .clk(clk_i),
-        .rst_n(rst_n_i),
+        .rst_n(rst_n),
         .in_pins1(ui_in_i),
         .in_pins2(uio_i),
         .a0(alpha),
         .a1(beta),
-        .core_busy(core_busy_ && ol_busy),
+        .core_busy(ol_busy && core_busy_),
         .start_calc(eig_core_start)
     );
 
