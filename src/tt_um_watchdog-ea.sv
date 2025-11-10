@@ -36,7 +36,7 @@ module tt_um_watchdog
         // param_loader Instance
     param_loader u_pl 
     (
-        .ena(ena_i)
+        .ena(ena_i),
         .clk(clk_i),
         .rst_n(rst_n),
         .in_pins1(ui_in_i),
@@ -63,7 +63,7 @@ module tt_um_watchdog
 
     // output_loader Instance
     output_loader u_ol (
-        .ena(ena_i)
+        .ena(ena_i),
         .clk(clk_i),
         .rst_n(rst_n_i),
         .start(start_ol),
