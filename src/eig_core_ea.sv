@@ -1,4 +1,4 @@
-`include "watchdog_pkg.v"
+`include "watchdog_pkg.sv"
 module eig_core (
     input  logic clk,
     input  logic rst_n,
