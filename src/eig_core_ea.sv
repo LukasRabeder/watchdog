@@ -67,7 +67,7 @@ module eig_core (
     assign regime = regime_q;
     assign kappa = kappa_q;
     assign inv_kappa = inv_kappa_q;
-    assign data_rdy = data_rdy_;
+    //assign data_rdy = data_rdy_;
 
     always_ff @(posedge clk or negedge rst_n) 
     begin
@@ -93,7 +93,7 @@ module eig_core (
             inv_start <= 1'b0;
             inv_done <= 1'b0;
 
-            data_rdy_ <= 1'b0;
+            //data_rdy_ <= 1'b0;
 
         end else if(ena) begin
             start_calc <= data_rdy;
@@ -153,7 +153,7 @@ module eig_core (
                 DONE: 
                 begin
                     calc_done_q <= 1'b1;
-                    data_rdy_ = 1'b1;
+                    //data_rdy_ = 1'b1;
                     state <= IDLE;
                 end
                 default: state <= IDLE;
