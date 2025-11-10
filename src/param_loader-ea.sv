@@ -5,8 +5,8 @@ module param_loader
     input  logic rst_n,
     input  logic [7:0] in_pins1,
     input  logic [7:0] in_pins2,
-    output logic signed [31:0] a0,
-    output logic signed [31:s0] a1,
+    output signed [31:0] a0,
+    output signed [31:s0] a1,
     output logic start_calc,
     input  logic core_busy
 );

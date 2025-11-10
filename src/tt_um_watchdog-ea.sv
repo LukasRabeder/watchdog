@@ -22,8 +22,8 @@ module tt_um_watchdog
     logic eig_core_start;
 
     // Data
-    logic signed [31:0] alpha, beta;
-    logic signed [31:0] invK, K;
+    signed [31:0] alpha, beta;
+    signed [31:0] invK, K;
     logic [2:0] regime;
 
     assign clk_i = clk;
