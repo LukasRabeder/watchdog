@@ -1,4 +1,4 @@
-include "watchdog_pkg.v"
+`include "watchdog_pkg.v"
 module inv_recip #(
   parameter W = 32,
   parameter F = 16
