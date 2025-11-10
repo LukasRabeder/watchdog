@@ -49,20 +49,21 @@ module inv_recip #(
   logic [M-1:0] yc;
   logic [W-1:0] tmpQF;
   // Function to find MSB position
-  function automatic integer msb_pos(logic [W-1:0] u);
-    integer result = 0;
-    begin
-      for (int i = 0; i < W; i++) 
-      begin
-        if (u[W-1 - i] == 1'b1) 
-        begin
-          result = W-1 - i;
-          msb_pos = result;
-        end
+function automatic integer msb_pos(logic [W-1:0] u);
+  integer result = 0;
+  begin
+    for (int i = 0; i < W; i++) begin
+      if (u[W-1 - i] == 1'b1) begin
+        result = W - 1 - i;
+        msb_pos = result; // assign the return value
+        return; // exit early
       end
-      msb_pos = result;
     end
-  endfunction
+    // no bits set, default result
+    msb_pos = result;
+  end
+endfunction
+
 
   //logic [W-1:0] tmpQF;
   logic [W-1:0] TWO_QF = 2**(F+1); // 2.0 in QF
@@ -111,16 +112,24 @@ module inv_recip #(
           end
         end
 
-        S_NORM: begin
-          if (x_abs == 0) begin
+        S_NORM: 
+        begin
+          integer p, s;
+          if (x_abs == 0) 
+          begin
             y  <= '0;
             st <= S_DONE;
-          end else begin
-            int p = msb_pos(x_abs);         // Position of MSB (0..W-1)
-            int s = (F-1) - p;              // Shift, to bring MSB to Bit F-1
-            if (s >= 0) begin
+          end 
+          else 
+          begin
+            p = msb_pos(x_abs);         // Position of MSB (0..W-1)
+            s = (F-1) - p;              // Shift, to bring MSB to Bit F-1
+            if (s >= 0) 
+            begin
               x_norm <= x_abs << s;
-            end else begin
+            end 
+            else 
+            begin
               x_norm <= x_abs >> -s;
             end
             e <= -s;                     // x = x_norm * 2^e
