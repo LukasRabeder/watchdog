@@ -24,7 +24,8 @@ module param_loader
     assign a1 = a1_reg;
     assign start_calc = ready_q;
 
-    always_ff @(posedge clk or negedge rst_n) begin
+    always_ff @(posedge clk or negedge rst_n) 
+    begin
         if (!rst_n) begin
             state <= S_IDLE;
             a0_reg <= 32'b0;
@@ -54,14 +55,15 @@ module param_loader
                         ready_q <= 1'b0;
                     end
                 end
-                else
-                begin
-                    a0 <= 32'b0;
-                    a1 <= 32'b0;
-                    start_calc <= 1'b0;
-                end
             endcase
         end
+        else
+        begin
+            a0 <= 32'b0;
+            a1 <= 32'b0;
+            start_calc <= 1'b0;
+        end
     end
+
 
 endmodule
