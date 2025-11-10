@@ -42,7 +42,7 @@ module inv_recip #(
 
   logic [W-1:0] y;       // QF, iterative reciprocal
   integer idx = 0;
-  integer p, s = 0;
+  integer s = 0;
 
   // Width for QF*QF
   localparam M = 2*W;
@@ -50,22 +50,22 @@ module inv_recip #(
   logic [M-1:0] yc;
   logic [W-1:0] tmpQF;
   // Function to find MSB position
-function automatic integer msb_pos(logic [W-1:0] u);
-  integer result = 0;
-  begin
-    for (int i = 0; i < W; i++) begin
-      if (u[W-1 - i] == 1'b1) begin
-        result = W - 1 - i;
-        msb_pos = result; // assign the return value
-        return; // exit early
-      end
-    end
+//function automatic integer msb_pos(logic [W-1:0] u);
+//  integer result = 0;
+//  begin
+//    for (int i = 0; i < W; i++) begin
+//      if (u[W-1 - i] == 1'b1) begin
+//        result = W - 1 - i;
+//        msb_pos = result; // assign the return value
+//        return; // exit early
+//      end
+//    end
     // no bits set, default result
-    msb_pos = result;
-  end
-endfunction
+//    msb_pos = result;
+//  end
+//endfunction
 
-
+  logic [$clog2(W)-1:0] msb_pos;
   //logic [W-1:0] tmpQF;
   logic [W-1:0] TWO_QF = 2**(F+1); // 2.0 in QF
 
@@ -74,6 +74,16 @@ endfunction
     invalid = (st == S_DONE && (x_in <= 0)) ? 1'b1 : 1'b0;
     done    = (st == S_DONE) ? 1'b1 : 1'b0;
     x_inv   = y;
+    msb_pos = 0; // default value
+    for (int i = W-1; i >= 0; i--) 
+    begin
+    if (x_abs[i]) 
+    begin
+      msb_pos = i;
+      break; // exit loop early when first '1' is found from MSB
+    end
+  end
+  // If x_abs is zero, msb_pos will be 0 (or adjust as needed)
   end
 
   always_ff @(posedge clk or negedge rst_n) 
@@ -122,8 +132,7 @@ endfunction
           end 
           else 
           begin
-            p = msb_pos(x_abs);         // Position of MSB (0..W-1)
-            s = (F-1) - p;              // Shift, to bring MSB to Bit F-1
+            s = (F-1) - msb_pos;              // Shift, to bring MSB to Bit F-1
             if (s >= 0) 
             begin
               x_norm <= x_abs << s;
