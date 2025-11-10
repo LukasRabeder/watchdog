@@ -56,10 +56,11 @@ architecture rtl of watchdog is
         a0             => alpha,
         a1             => beta,
         core_busy      => core_busy,
-        omega          => omega,
+        --omega          => omega,
         kappa          => kappa,
-        neg_beta_h     => neg_h_b,
-        sqrt_disc_half => sq_h_disc,
+        --neg_beta_h     => neg_h_b,
+        --sqrt_disc_half => sq_h_disc,
+        inv_kappa      => invK,
         regime         => regime
     );
     inv_ : entity work.inv_recip
