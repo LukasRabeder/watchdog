@@ -12,7 +12,7 @@ project:
   tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
   top_module:   "tt_um_watchdog"         # The name of the top-level module
   source_files:                # List of Verilog source files
-    - "watchdog-ea.v"
+    - "tt_um_watchdog-ea.v"
     - "param_loader-ea.v"
     - "eig_core_ea.v"
     - "output_loader-ea.v"
