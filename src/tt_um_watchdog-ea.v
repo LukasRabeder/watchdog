@@ -50,14 +50,15 @@ always_ff @(posedge clk or negedge rst_n) begin
   if (ena) 
   begin 
     // param_loader Instance
-    param_loader u_pl (
+    param_loader u_pl 
+    (
         .clk(clk_i),
         .rst_n(rst_n),
         .in_pins1(ui_in_i),
         .in_pins2(uio_i),
         .a0(alpha),
         .a1(beta),
-        .core_busy(core_busy),
+        .core_busy(core_busy & ol_busy),
         .start_calc(eig_core_start)
     );
 
@@ -88,7 +89,7 @@ always_ff @(posedge clk or negedge rst_n) begin
   end
   else
   begin
-    uo_out <= 8'0;
+    uo_out <= 8'b0;
   end
 end
 
