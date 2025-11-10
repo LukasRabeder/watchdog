@@ -1,9 +1,11 @@
+// watchdog_pkg.v
 //------------------------------------------------------------------------------
 // Function: saturate
 //------------------------------------------------------------------------------
-function logic [31:0] saturate(input signed [31:0] input, int target_width); // Assuming maximum target_width of 32
+function logic signed [31:0] saturate(input logic signed [31:0] input, integer target_width); // Assuming maximum target_width of 32
     logic signed [31:0] result; // Assuming maximum target_width of 32
-    
+    integer i;
+
     if (input'high < target_width - 1) begin
         result = input; // Sign-extend
     end else begin
@@ -34,7 +36,8 @@ endfunction
 //------------------------------------------------------------------------------
 function logic or_reduce(logic [31:0] v); // Assuming maximum width of 32
     logic result = 1'b0;
-    for (int i = 0; i < 32; i++) begin // Assuming maximum width of 32
+    integer i;
+    for (i = 0; i < 32; i++) begin // Assuming maximum width of 32
         if (v[i] == 1'b1) begin
             result = result | v[i];
         end
@@ -47,7 +50,8 @@ endfunction
 //------------------------------------------------------------------------------
 function logic and_reduce(logic [31:0] v); // Assuming maximum width of 32
     logic result = 1'b1;
-    for (int i = 0; i < 32; i++) begin // Assuming maximum width of 32
+    integer i;
+    for (i = 0; i < 32; i++) begin // Assuming maximum width of 32
         if (v[i] == 1'b0) begin
             result = result & v[i];
         end
@@ -58,7 +62,7 @@ endfunction
 //------------------------------------------------------------------------------
 // Function: even_up
 //------------------------------------------------------------------------------
-function int even_up(int x);
+function integer even_up(integer x);
     if ((x % 2) == 0) begin
         return x;
     end else begin
@@ -69,9 +73,10 @@ endfunction
 //------------------------------------------------------------------------------
 // Function: msb_pos
 //------------------------------------------------------------------------------
-function int msb_pos(logic unsigned [31:0] x); // Assuming maximum width of 32
-    int result = -1;
-    for (int i = 31; i >= 0; i--) begin // Assuming maximum width of 32
+function integer msb_pos(logic unsigned [31:0] x); // Assuming maximum width of 32
+    integer result = -1;
+    integer i;
+    for (i = 31; i >= 0; i--) begin // Assuming maximum width of 32
         if (x[i] == 1'b1) begin
             result = i;
             return result;
@@ -83,7 +88,7 @@ endfunction
 //------------------------------------------------------------------------------
 // Function: sel_nibble32
 //------------------------------------------------------------------------------
-function logic [3:0] sel_nibble32(logic [31:0] word, int idx);
-    int lo = (idx * 4);
+function logic [3:0] sel_nibble32(logic [31:0] word, integer idx);
+    integer lo = (idx * 4);
     return word[31 - lo:28 - lo];
 endfunction
