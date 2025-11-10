@@ -1,3 +1,4 @@
+include "watchdog_pkg.v"
 module param_loader 
 (
     input  logic clk,

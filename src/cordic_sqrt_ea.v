@@ -1,3 +1,4 @@
+include "watchdog_pkg.v"
 module cordic_sqrt #(
   parameter IN_WIDTH  = 32,
   parameter OUT_WIDTH = IN_WIDTH/2

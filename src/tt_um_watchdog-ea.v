@@ -1,3 +1,4 @@
+include "watchdog_pkg.v"
 module tt_um_watchdog 
 (
     input  logic clk,

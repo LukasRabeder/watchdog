@@ -1,3 +1,4 @@
+include "watchdog_pkg.v"
 module output_loader #(
     parameter W = 32
 ) (
