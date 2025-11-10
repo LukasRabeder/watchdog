@@ -24,8 +24,8 @@ module cordic_sqrt #(
   logic [OUT_WIDTH*2-1:0] remind;
   logic [OUT_WIDTH-1:0] root;
   integer iter;
-  logic [OUT_WIDTH*2-1:0] rem_next;
-  logic [OUT_WIDTH:0] trial;
+  logic [63:0] rem_next;
+  logic [63:0] trial;
 
   always_comb begin
     
