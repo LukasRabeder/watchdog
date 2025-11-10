@@ -10,7 +10,7 @@ project:
 
   # How many tiles your design occupies? A single tile is about 167x108 uM.
   tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
-  top_module:   "watchdog"         # The name of the top-level module
+  top_module:   "tt_um_watchdog"         # The name of the top-level module
   source_files:                # List of Verilog source files
     - "watchdog-ea.v"
     - "param_loader-ea.v"
