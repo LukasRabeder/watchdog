@@ -5,6 +5,7 @@ module output_loader #(
     input  logic clk,
     input  logic rst_n,
     input  logic start,
+    input  logic ena,
     input  logic [2:0] mode,
     input  logic [W-1:0] wordA,
     input  logic [W-1:0] wordB,
@@ -48,7 +49,7 @@ module output_loader #(
             data_rdy <= 1'b0;
             out_byte <= 8'b0;
             shift_reg <= {W{1'b0}};
-        end else begin
+        end else if (ena) begin
             case (state)
                 IDLE: begin
                     data_rdy <= 1'b0;
@@ -82,6 +83,11 @@ module output_loader #(
                 end
                 default: state <= IDLE;
             endcase
+        end
+        else
+        begin 
+            busy <= 1'b0;
+            out_byte <= 8'b0;
         end
     end
 

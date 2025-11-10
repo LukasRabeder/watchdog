@@ -1,5 +1,6 @@
 
 module eig_core (
+    inpout logic ena,
     input  logic clk,
     input  logic rst_n,
     input  logic data_rdy,
@@ -87,7 +88,7 @@ module eig_core (
             inv_start <= 1'b0;
             inv_done <= 1'b0;
 
-        end else begin
+        end else if(ena) begin
             start_calc <= data_rdy;
             case (state)
                 IDLE: begin
@@ -148,6 +149,12 @@ module eig_core (
                 end
                 default: state <= IDLE;
             endcase
+        end
+        else
+        begin
+            regime <= 3'b0;
+            kappa <= 32'b0;
+            inv_kappa <= 32'b0;
         end
     end
 endmodule

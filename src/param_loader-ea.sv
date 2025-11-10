@@ -1,12 +1,13 @@
 
 module param_loader 
 (
+    input  logic ena,
     input  logic clk,
     input  logic rst_n,
     input  logic [7:0] in_pins1,
     input  logic [7:0] in_pins2,
-    output signed [31:0] a0,
-    output signed [31:s0] a1,
+    output logic signed [31:0] a0,
+    output logic signed [31:0] a1,
     output logic start_calc,
     input  logic core_busy
 );
@@ -30,7 +31,7 @@ module param_loader
             a1_reg <= 32'b0;
             start_q <= 1'b0;
             ready_q <= 1'b0;
-        end else begin
+        end else if (ena) begin
             case (state)
                 S_IDLE: begin
                     start_q <= ~core_busy;  // Invert core_busy
@@ -52,6 +53,12 @@ module param_loader
                         state <= S_IDLE;
                         ready_q <= 1'b0;
                     end
+                end
+                else
+                begin
+                    a0 <= 32'b0;
+                    a1 <= 32'b0;
+                    start_calc <= 1'b0;
                 end
                 default: state <= S_IDLE;
             endcase
