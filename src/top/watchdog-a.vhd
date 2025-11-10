@@ -20,11 +20,8 @@ architecture rtl of watchdog is
     -- Daten
     signal alpha, beta           : signed(31 downto 0) := (others=>'0');
 
-    signal kappa, omega, omega0  : signed(31 downto 0) := (others=>'0');
     signal invK, K               : signed(31 downto 0) := (others=>'0');
 
-    signal neg_h_b               : signed(31 downto 0) := (others=>'0');
-    signal sq_h_disc             : signed(31 downto 0) := (others=>'0');
     signal regime                : std_logic_vector(2 downto 0);
 
     begin
@@ -57,25 +54,11 @@ architecture rtl of watchdog is
         a1             => beta,
         core_busy      => core_busy,
         --omega          => omega,
-        kappa          => kappa,
+        kappa          => K,
         --neg_beta_h     => neg_h_b,
         --sqrt_disc_half => sq_h_disc,
         inv_kappa      => invK,
         regime         => regime
-    );
-    inv_ : entity work.inv_recip
-     generic map
-     (
-        W => 32,
-        F => 16
-     )
-     port map(
-        clk => clk,
-        rst_n => rst_n,
-        start_calc => res_valid,
-        x_in => kappa,
-        done => start_ol,
-        x_inv => unsigned(invK)        
     );
     u_ol : entity work.output_loader
     port map (
@@ -83,7 +66,7 @@ architecture rtl of watchdog is
         rst_n          => rst_n_i,
         start          => start_ol,
         mode           => regime,
-        wordA          => std_logic_vector(kappa),
+        wordA          => std_logic_vector(K),
         wordB          => std_logic_vector(invK),
         busy           => ol_busy,
         out_byte       => uo_out_i

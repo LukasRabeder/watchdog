@@ -4,12 +4,8 @@
 # defaults
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
-SRC_DIR = $(PWD)/../verilog/src
-PROJECT_SOURCES = watchdog-ea.v \
-                  output_loader-ea.v \
-			      inv_recip.v \
-				  eig_core_ea.v \
-				  cordic_sqrt_ea.v
+SRC_DIR = $(PWD)/../verilog/src/
+PROJECT_SOURCES = project.v
 
 ifneq ($(GATES),yes)
 
