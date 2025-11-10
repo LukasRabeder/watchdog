@@ -72,6 +72,7 @@ module inv_recip #(
 
   always_comb 
   begin
+    found = 0;
     invalid = (st == S_DONE && (x_in <= 0)) ? 1'b1 : 1'b0;
     done    = (st == S_DONE) ? 1'b1 : 1'b0;
     x_inv   = y;
