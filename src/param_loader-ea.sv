@@ -55,6 +55,7 @@ module param_loader
                         ready_q <= 1'b0;
                     end
                 end
+                default: state <= S_IDLE;
             endcase
         end
         else

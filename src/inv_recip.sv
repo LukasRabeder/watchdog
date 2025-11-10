@@ -56,10 +56,11 @@ module inv_recip #(
         if (u[W-1 - i] == 1'b1) 
         begin
           result = W-1 - i;
-          return result;
+          msb_pos = result;
+          return
         end
       end
-      return result;
+      msb_pos = result;
     end
   endfunction
 
@@ -150,9 +151,11 @@ module inv_recip #(
           //done <= 1'b0;
         end
 
-        S_DONE: begin
+        S_DONE: 
+        begin
           st <= S_IDLE;
         end
+        default: st <= S_IDLE;
       endcase
     end
   end
