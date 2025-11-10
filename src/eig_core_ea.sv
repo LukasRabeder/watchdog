@@ -88,6 +88,8 @@ module eig_core (
             inv_start <= 1'b0;
             inv_done <= 1'b0;
 
+            data_rdy <= 1'b0;
+
         end else if(ena) begin
             start_calc <= data_rdy;
             case (state)
@@ -99,6 +101,7 @@ module eig_core (
                     end
                 end
                 PREP_DISC: begin
+                    data_rdy <= 1'b0;
                     alpha4 <= alpha << 2; // alpha * 4
                     beta_sq <= $signed($unsigned(beta) * $unsigned(beta));
                     if (alpha4 < beta_sq) begin
@@ -145,6 +148,7 @@ module eig_core (
                 DONE: 
                 begin
                     calc_done_q <= 1'b1;
+                    data_rdy = 1'b1;
                     state <= IDLE;
                 end
                 default: state <= IDLE;

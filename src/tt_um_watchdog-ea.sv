@@ -52,7 +52,7 @@ module tt_um_watchdog
         .ena(ena_i),
         .clk(clk_i),
         .rst_n(rst_n_i),
-        .data_rdy(1'b1),    //data_rdy immer true, durch datenvalidierung im Param Loader
+        .data_rdy(start_ol), 
         .a0(alpha),
         .a1(beta),
         .core_busy(core_busy_),
@@ -87,12 +87,14 @@ always_ff @(posedge clk or negedge rst_n) begin
     res_valid <= 1'b0;
     ol_busy <= 1'b0;
     start_ol <= 1'b0;
-    eig_core_start <= 1'b0;
+
   end 
   else 
   if (ena) 
   begin 
-
+      eig_core_start <= 1'b1;
+      core_busy_ <= 1'b0;
+      ol_busy <= 1b'b0;
   end
   else
   begin
