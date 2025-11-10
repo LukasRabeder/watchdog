@@ -88,7 +88,7 @@ always_ff @(posedge clk or negedge rst_n) begin
   end
   else
   begin
-    uo_out <= 8'bit0;
+    uo_out <= 8'0;
   end
 end
 
