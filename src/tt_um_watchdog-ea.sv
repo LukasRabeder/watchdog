@@ -4,10 +4,10 @@ module tt_um_watchdog
     input  logic rst_n,
     input  logic ena,
     input  logic [7:0] ui_in,       // User Input (7 bits)
-    input  logic [7:0] uio,
-    //input  wire [7:0] uio_in,   // IOs: Bidirectional Input path
-    //output wire [7:0] uio_out,  // IOs: Bidirectional Output path
-    //output wire [7:0] uio_oe,   // IOs: Bidirectional Enable path (active high: 0=input, 1=output)
+    inout wire [7:0] uio,
+    output wire [7:0] uio_in,   // Signal, das du aus der Leitung liest
+    output wire [7:0] uio_out,  // Signal, das du auf die Leitung schickst
+    output wire [7:0] uio_oe    // Steuerung: aktiv für Schreiben (1), Lesen (0)
     output logic [7:0] uo_out      // User Output (8 bits)
 );
     logic clk_i;
@@ -31,14 +31,21 @@ module tt_um_watchdog
     logic [2:0] regime;
 
     // use bidirectionals as inputs
-    //assign uio_oe = 8'b0;
+    // Tri-State Buffer Realisierung
+    assign uio = uio_oe ? uio_out : 'z;  // Leitung 'z' wenn lese (uio_oe=0)
+    assign uio_in = uio;                  // Lesen immer aufnehmen
     assign clk_i = clk;
     assign ena_i = ena;
     assign rst_n_i = rst_n;
     assign ui_in_i = {1'b0, ui_in};  // Pad ui_in to 8 bits
-    assign uio_i = {1'b0, uio};    // Pad uio to 8 bits
+    assign uio_i = {1'b0, uio_in};    // Pad uio to 8 bits
     assign uo_out = uo_out_i;
         // param_loader Instance
+        // Das erzeugst du z.B. so
+    initial begin
+      uio_out = 8'hA5;  
+      uio_oe  = 8'b0;  // Statisch auf 0, Leitung nur lesen
+    end
     param_loader u_pl 
     (
         .ena(ena_i),
