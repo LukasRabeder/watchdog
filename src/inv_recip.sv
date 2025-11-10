@@ -11,24 +11,29 @@ module inv_recip #(
   output logic [W-1:0] x_inv,
   output logic invalid
 );
-  localparam logic [W-1:0] inv_lut [0:15] = '{ 
-  32'd4096,  // 1.0000 Q16
-  32'd8192,  // 0.9375
-  32'd12288, // 0.8750
-  32'd16384, // 0.8125
-  32'd20480, // 0.7500
-  32'd24576, // 0.6875
-  32'd28672, // 0.6250
-  32'd32768, // 0.5625
-  32'd36864, // 0.5000
-  32'd40960, // 0.4375
-  32'd45056, // 0.3750
-  32'd49152, // 0.3125
-  32'd53248, // 0.2500
-  32'd57344, // 0.1875
-  32'd61440, // 0.1250
-  32'd65536  // 0.0625
-};
+  logic [W-1:0] inv_lut;
+
+always_comb begin
+  case (x_norm[W-1:W-4])
+    4'h0: inv_lut = 32'd4096;
+    4'h1: inv_lut = 32'd8192;
+    4'h2: inv_lut = 32'd12288;
+    4'h3: inv_lut = 32'd16384;
+    4'h4: inv_lut = 32'd20480;
+    4'h5: inv_lut = 32'd24576;
+    4'h6: inv_lut = 32'd28672;
+    4'h7: inv_lut = 32'd32768;
+    4'h8: inv_lut = 32'd36864;
+    4'h9: inv_lut = 32'd40960;
+    4'ha: inv_lut = 32'd45056;
+    4'hb: inv_lut = 32'd49152;
+    4'hc: inv_lut = 32'd53248;
+    4'hd: inv_lut = 32'd57344;
+    4'he: inv_lut = 32'd61440;
+    4'hf: inv_lut = 32'd65536;
+    default: inv_lut = 0;
+  endcase
+end
 
   // State type
   typedef enum logic [3:0] {S_IDLE, S_CHECK, S_NORM, S_LUT, S_IT0, S_IT1, S_IT2, S_IT3, S_DEN, S_DONE} st_t;
@@ -39,7 +44,6 @@ module inv_recip #(
   integer signed e = 0;
 
   logic [W-1:0] y;       // QF, iterative reciprocal
-  logic [W-1:0] y_next; 
   integer idx = 0;
   integer s = 0;
 
@@ -68,7 +72,6 @@ module inv_recip #(
   logic found = 0;
   //logic [W-1:0] tmpQF;
   logic [W-1:0] TWO_QF = 2**(F+1); // 2.0 in QF
-  logic [W-1:0] inv_lut_value;
 
   always_comb 
   begin
@@ -85,25 +88,6 @@ module inv_recip #(
       found = 1; // exit loop early when first '1' is found from MSB
     end
   end
-  case (x_norm[W-1:W-4])
-    4'h0: inv_lut_value = 32'd4096;
-    4'h1: inv_lut_value = 32'd8192;
-    4'h2: inv_lut_value = 32'd12288;
-    4'h3: inv_lut_value = 32'd16384;
-    4'h4: inv_lut_value = 32'd20480;
-    4'h5: inv_lut_value = 32'd24576;
-    4'h6: inv_lut_value = 32'd28672;
-    4'h7: inv_lut_value = 32'd32768;
-    4'h8: inv_lut_value = 32'd36864;
-    4'h9: inv_lut_value = 32'd40960;
-    4'ha: inv_lut_value = 32'd45056;
-    4'hb: inv_lut_value = 32'd49152;
-    4'hc: inv_lut_value = 32'd53248;
-    4'hd: inv_lut_value = 32'd57344;
-    4'he: inv_lut_value = 32'd61440;
-    4'hf: inv_lut_value = 32'd65536;
-    default: inv_lut_value = 0;
-  endcase
   end
 
   always_ff @(posedge clk or negedge rst_n) 
@@ -169,7 +153,7 @@ module inv_recip #(
         S_LUT: 
         begin
           idx <= x_norm[W-1:W-4];        // upper Nibble
-          y   <= y_next;
+          y   <= inv_lut;
           st  <= S_IT0;
         end
 
@@ -209,11 +193,6 @@ module inv_recip #(
         default: st <= S_IDLE;
       endcase
     end
-  end
-
-  always_comb
-  begin
-    y_next = inv_lut_value;
   end
 
 endmodule
