@@ -16,7 +16,7 @@ module eig_core (
     logic signed [31:0] alpha, beta;
     logic start_calc;
     logic disc_neg;
-    logic data_rdy_
+    logic data_rdy_;
 
     // Handshake signals for cordic_sqrt
     logic sqrt_start;
