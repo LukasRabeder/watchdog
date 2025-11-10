@@ -86,7 +86,7 @@ module output_loader #(
         end
         else
         begin 
-            busy <= 1'b0;
+            //busy <= 1'b0;
             out_byte <= 8'b0;
         end
     end

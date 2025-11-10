@@ -81,15 +81,15 @@ module tt_um_watchdog
 always_ff @(posedge clk or negedge rst_n) begin
   if (!rst_n) 
   begin
-    alpha <= 32'b0;
-    beta  <= 32'b0;
-    invK  <= 32'b0;
-    K     <= 32'b0;
-    regime <= 3'b000;
-    uo_out <= 8'b0;
-    core_busy_ <= 1'b0;
+    //alpha <= 32'b0;
+    //beta  <= 32'b0;
+    //invK  <= 32'b0;
+    //K     <= 32'b0;
+    //regime <= 3'b000;
+    //uo_out <= 8'b0;
+    //core_busy_ <= 1'b0;
     res_valid <= 1'b0;
-    ol_busy <= 1'b0;
+    //ol_busy <= 1'b0;
     start_ol <= 1'b0;
 
   end 
@@ -97,12 +97,12 @@ always_ff @(posedge clk or negedge rst_n) begin
   if (ena) 
   begin 
       eig_core_start <= 1'b1;
-      core_busy_ <= 1'b0;
-      ol_busy <= 1'b0;
+      //core_busy_ <= 1'b0;
+      //ol_busy <= 1'b0;
   end
   else
   begin
-    uo_out <= 8'b0;
+    //uo_out <= 8'b0;
   end
 end
 

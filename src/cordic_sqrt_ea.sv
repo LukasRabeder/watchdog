@@ -28,7 +28,8 @@ module cordic_sqrt #(
   logic [OUT_WIDTH:0] trial;
 
   always_comb begin
-    y_out = root;
+    
+    y_out = root >> 1;
     done  = (st == FIN) ? 1'b1 : 1'b0;
     is_neg = neg_flag;
   end

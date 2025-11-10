@@ -81,17 +81,17 @@ module eig_core (
             beta_q <= 32'b0;
             omega_q <= 32'b0;
             kappa_q <= 32'b0;
-            inv_kappa_q <= 32'b0;
+            //inv_kappa_q <= 32'b0;
             neg_beta_h_q <= 32'b0;
-            sqrt_disc_half_q <= 32'b0;
+            //sqrt_disc_half_q <= 32'b0;
             disc_neg <= 1'b0;
 
             // Initialize handshake signals
             sqrt_start <= 1'b0;
-            sqrt_done <= 1'b0;
+            //sqrt_done <= 1'b0;
 
             inv_start <= 1'b0;
-            inv_done <= 1'b0;
+            //inv_done <= 1'b0;
 
             //data_rdy_ <= 1'b0;
 
@@ -125,7 +125,7 @@ module eig_core (
                 CALC_DISC: begin
                     if (sqrt_done) begin
                         sqrt_start <= 1'b0; // Deassert sqrt_start
-                        sqrt_disc_half_q <= sqrt_disc_half_q >> 1; // sqrt(disc)/2
+                        //sqrt_disc_half_q <= sqrt_disc_half_q >> 1; // sqrt(disc)/2
                         neg_beta_h_q <= -beta >>> 1; // -beta/2
 
                         // Calculate kappa based on regime
@@ -161,9 +161,10 @@ module eig_core (
         end
         else
         begin
-            regime <= 3'b0;
-            kappa <= 32'b0;
-            inv_kappa <= 32'b0;
+            state <= IDLE;
+            //regime <= 3'b0;
+            //kappa <= 32'b0;
+            //inv_kappa <= 32'b0;
         end
     end
 endmodule

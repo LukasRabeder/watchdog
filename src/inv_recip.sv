@@ -54,7 +54,7 @@ module inv_recip #(
     begin
       for (int i = 0; i < W; i++) begin
         if (u[W-1 - i] == 1'b1) begin
-          result = W-1 - i;
+          result <= W-1 - i;
           return result;
         end
       end
@@ -84,7 +84,7 @@ module inv_recip #(
         S_IDLE: begin
           if (start_calc == 1'b1) begin
             st    <= S_CHECK;
-            done <= 1'b0;
+            //done <= 1'b0;
           end
         end
 
@@ -146,7 +146,7 @@ module inv_recip #(
             y <= y << -e;   // 2^{-e} with e<0 => << (-e)
           end
           st <= S_DONE;
-          done <= 1'b0;
+          //done <= 1'b0;
         end
 
         S_DONE: begin

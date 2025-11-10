@@ -59,8 +59,8 @@ module param_loader
         end
         else
         begin
-            a0 <= 32'b0;
-            a1 <= 32'b0;
+            //a0 <= 32'b0;
+            //a1 <= 32'b0;
             start_calc <= 1'b0;
         end
     end
