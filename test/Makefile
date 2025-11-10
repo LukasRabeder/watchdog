@@ -4,7 +4,7 @@
 # defaults
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
-SRC_DIR = $(PWD)/../verilog/src/
+SRC_DIR = $(PWD)/../src/
 PROJECT_SOURCES = tt_um_watchdog-ea.v \
                   param_loader-ea.v \
                   eig_core_ea.v \
