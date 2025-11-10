@@ -67,10 +67,12 @@ module eig_core (
     assign regime = regime_q;
     assign kappa = kappa_q;
     assign inv_kappa = inv_kappa_q;
-    assign data_rdy = data_rdy_
+    assign data_rdy = data_rdy_;
 
-    always_ff @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
+    always_ff @(posedge clk or negedge rst_n) 
+    begin
+        if (!rst_n) 
+        begin
             state <= IDLE;
             calc_done_q <= 1'b0;
             start_calc <= 1'b0;
