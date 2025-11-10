@@ -5,6 +5,9 @@ module tt_um_watchdog
     input  logic ena,
     input  logic [7:0] ui_in,       // User Input (7 bits)
     input  logic [7:0] uio_in,       // User InOut (7 bits)
+    input  wire [7:0] uio_in,   // IOs: Bidirectional Input path
+    output wire [7:0] uio_out,  // IOs: Bidirectional Output path
+    output wire [7:0] uio_oe,   // IOs: Bidirectional Enable path (active high: 0=input, 1=output)
     output logic [7:0] uo_out      // User Output (8 bits)
 );
     logic clk_i;
@@ -27,6 +30,8 @@ module tt_um_watchdog
     logic signed [31:0] invK, K;
     logic [2:0] regime;
 
+    // use bidirectionals as inputs
+    assign uio_oe = 8'b0;
     assign clk_i = clk;
     assign ena_i = ena;
     assign rst_n_i = rst_n;
