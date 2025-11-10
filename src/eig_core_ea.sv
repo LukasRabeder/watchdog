@@ -16,6 +16,7 @@ module eig_core (
     logic signed [31:0] alpha, beta;
     logic start_calc;
     logic disc_neg;
+    logic data_rdy_
 
     // Handshake signals for cordic_sqrt
     logic sqrt_start;
@@ -24,6 +25,7 @@ module eig_core (
     // Handshake signals for inv_recip
     logic inv_start;
     logic inv_done;
+    logic invalid;
 
     logic calc_done_q;
     logic [2:0] regime_q;
@@ -58,13 +60,14 @@ module eig_core (
         .x_in(kappa_q),
         .x_inv(inv_kappa_q),
         .done(inv_done),
-        .invalid()
+        .invalid(invalid)
     );
 
     assign core_busy = ~calc_done_q;
     assign regime = regime_q;
     assign kappa = kappa_q;
     assign inv_kappa = inv_kappa_q;
+    assign data_rdy = data_rdy_
 
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -88,7 +91,7 @@ module eig_core (
             inv_start <= 1'b0;
             inv_done <= 1'b0;
 
-            data_rdy <= 1'b0;
+            data_rdy_ <= 1'b0;
 
         end else if(ena) begin
             start_calc <= data_rdy;
@@ -101,7 +104,7 @@ module eig_core (
                     end
                 end
                 PREP_DISC: begin
-                    data_rdy <= 1'b0;
+                    data_rdy_ <= 1'b0;
                     alpha4 <= alpha << 2; // alpha * 4
                     beta_sq <= $signed($unsigned(beta) * $unsigned(beta));
                     if (alpha4 < beta_sq) begin
@@ -148,7 +151,7 @@ module eig_core (
                 DONE: 
                 begin
                     calc_done_q <= 1'b1;
-                    data_rdy = 1'b1;
+                    data_rdy_ = 1'b1;
                     state <= IDLE;
                 end
                 default: state <= IDLE;

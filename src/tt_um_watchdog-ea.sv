@@ -4,7 +4,6 @@ module tt_um_watchdog
     input  logic rst_n,
     input  logic ena,
     input  logic [7:0] ui_in,       // User Input (7 bits)
-    input  logic [7:0] uio_in,       // User InOut (7 bits)
     input  wire [7:0] uio_in,   // IOs: Bidirectional Input path
     output wire [7:0] uio_out,  // IOs: Bidirectional Output path
     output wire [7:0] uio_oe,   // IOs: Bidirectional Enable path (active high: 0=input, 1=output)
@@ -88,7 +87,7 @@ always_ff @(posedge clk or negedge rst_n) begin
     K     <= 32'b0;
     regime <= 3'b000;
     uo_out <= 8'b0;
-    core_busy <= 1'b0;
+    core_busy_ <= 1'b0;
     res_valid <= 1'b0;
     ol_busy <= 1'b0;
     start_ol <= 1'b0;
