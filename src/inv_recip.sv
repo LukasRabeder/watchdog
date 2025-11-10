@@ -39,6 +39,7 @@ module inv_recip #(
   integer signed e = 0;
 
   logic [W-1:0] y;       // QF, iterative reciprocal
+  logic [W-1:0] y_next; 
   integer idx = 0;
   integer s = 0;
 
@@ -168,7 +169,7 @@ module inv_recip #(
         S_LUT: 
         begin
           idx <= x_norm[W-1:W-4];        // upper Nibble
-          y   <= inv_lut_value;
+          y   <= y_next;
           st  <= S_IT0;
         end
 
@@ -208,6 +209,11 @@ module inv_recip #(
         default: st <= S_IDLE;
       endcase
     end
+  end
+
+  always_comb
+  begin
+    y_next = inv_lut_value;
   end
 
 endmodule
