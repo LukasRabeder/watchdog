@@ -49,15 +49,15 @@ module inv_recip #(
   logic [M-1:0] yc;
   logic [W-1:0] tmpQF;
   // Function to find MSB position
-  function integer msb_pos(logic [W-1:0] u);
+  function automatic integer msb_pos(logic [W-1:0] u);
     integer result = 0;
     begin
-      for (int i = 0; i < W; i++) begin
+      for (int i = 0; i < W; i++) 
+      begin
         if (u[W-1 - i] == 1'b1) 
         begin
           result = W-1 - i;
           msb_pos = result;
-          return
         end
       end
       msb_pos = result;
@@ -67,34 +67,45 @@ module inv_recip #(
   //logic [W-1:0] tmpQF;
   logic [W-1:0] TWO_QF = 2**(F+1); // 2.0 in QF
 
-  always_comb begin
+  always_comb 
+  begin
     invalid = (st == S_DONE && (x_in <= 0)) ? 1'b1 : 1'b0;
     done    = (st == S_DONE) ? 1'b1 : 1'b0;
     x_inv   = y;
   end
 
-  always_ff @(posedge clk or negedge rst_n) begin
-    if (!rst_n) begin
+  always_ff @(posedge clk or negedge rst_n) 
+  begin
+    if (!rst_n) 
+    begin
       st <= S_IDLE;
       x_abs <= '0;
       x_norm<= '0;
       e     <= 0;
       y     <= '0;
       idx   <= 0;
-    end else begin
+    end 
+    else 
+    begin
       case (st)
-        S_IDLE: begin
-          if (start_calc == 1'b1) begin
+        S_IDLE: 
+        begin
+          if (start_calc == 1'b1) 
+          begin
             st    <= S_CHECK;
             //done <= 1'b0;
           end
         end
 
-        S_CHECK: begin
-          if (x_in <= 0) begin
+        S_CHECK: 
+        begin
+          if (x_in <= 0) 
+          begin
             y  <= '0;
             st <= S_DONE;
-          end else begin
+          end 
+          else 
+          begin
             x_abs <= unsigned'(x_in); // only positive domain
             st    <= S_NORM;
           end
