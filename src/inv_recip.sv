@@ -125,7 +125,7 @@ module inv_recip #(
         S_IT0, S_IT1, S_IT2, S_IT3: begin
           xy <= x_norm * y;           // QF*QF
           // (x*y)>>F  -> again QF
-          tmpQF := xy >> F;
+          assign tmpQF = xy >> F;
           // corr = 2 - x*y
           yc <= y * (TWO_QF - tmpQF);   // QF*QF
           y  <= yc >> F; // back to QF
