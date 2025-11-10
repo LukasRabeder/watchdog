@@ -4,9 +4,10 @@ module tt_um_watchdog
     input  logic rst_n,
     input  logic ena,
     input  logic [7:0] ui_in,       // User Input (7 bits)
-    input  wire [7:0] uio_in,   // IOs: Bidirectional Input path
-    output wire [7:0] uio_out,  // IOs: Bidirectional Output path
-    output wire [7:0] uio_oe,   // IOs: Bidirectional Enable path (active high: 0=input, 1=output)
+    input  logic [7:0] uio,
+    //input  wire [7:0] uio_in,   // IOs: Bidirectional Input path
+    //output wire [7:0] uio_out,  // IOs: Bidirectional Output path
+    //output wire [7:0] uio_oe,   // IOs: Bidirectional Enable path (active high: 0=input, 1=output)
     output logic [7:0] uo_out      // User Output (8 bits)
 );
     logic clk_i;
@@ -30,12 +31,12 @@ module tt_um_watchdog
     logic [2:0] regime;
 
     // use bidirectionals as inputs
-    assign uio_oe = 8'b0;
+    //assign uio_oe = 8'b0;
     assign clk_i = clk;
     assign ena_i = ena;
     assign rst_n_i = rst_n;
     assign ui_in_i = {1'b0, ui_in};  // Pad ui_in to 8 bits
-    assign uio_i = {1'b0, uio_in};    // Pad uio to 8 bits
+    assign uio_i = {1'b0, uio};    // Pad uio to 8 bits
     assign uo_out = uo_out_i;
         // param_loader Instance
     param_loader u_pl 

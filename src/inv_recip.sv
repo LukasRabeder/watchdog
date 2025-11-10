@@ -136,7 +136,7 @@ end
           end 
           else 
           begin
-            s = (F-1) - msb_pos;              // Shift, to bring MSB to Bit F-1
+            s <= (F-1) - msb_pos;              // Shift, to bring MSB to Bit F-1
             if (s >= 0) 
             begin
               x_norm <= x_abs << s;
