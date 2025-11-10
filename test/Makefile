@@ -10,8 +10,7 @@ PROJECT_SOURCES = tt_um_watchdog-ea.sv \
                   eig_core_ea.sv \
                   output_loader-ea.sv \
                   cordic_sqrt_ea.sv \
-                  inv_recip.sv \
-				  watchdog_pkg.sv
+                  inv_recip.sv 
 
 ifneq ($(GATES),yes)
 

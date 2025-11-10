@@ -1,4 +1,3 @@
-`include "watchdog_pkg.sv"
 module tt_um_watchdog 
 (
     input  logic clk,

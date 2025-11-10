@@ -18,7 +18,6 @@ project:
     - "output_loader-ea.sv"
     - "cordic_sqrt_ea.sv"
     - "inv_recip.sv"
-    - "watchdog_pkg.sv"
 
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
