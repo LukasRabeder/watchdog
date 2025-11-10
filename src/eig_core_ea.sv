@@ -1,6 +1,6 @@
 
 module eig_core (
-    inpout logic ena,
+    input  logic ena,
     input  logic clk,
     input  logic rst_n,
     input  logic data_rdy,
