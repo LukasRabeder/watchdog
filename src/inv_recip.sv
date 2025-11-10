@@ -42,6 +42,7 @@ module inv_recip #(
 
   logic [W-1:0] y;       // QF, iterative reciprocal
   integer idx = 0;
+  integer p, s = 0;
 
   // Width for QF*QF
   localparam M = 2*W;
@@ -114,7 +115,6 @@ endfunction
 
         S_NORM: 
         begin
-          integer p, s;
           if (x_abs == 0) 
           begin
             y  <= '0;
@@ -137,7 +137,8 @@ endfunction
           end
         end
 
-        S_LUT: begin
+        S_LUT: 
+        begin
           idx <= x_norm[W-1:W-4];        // upper Nibble
           y   <= inv_lut[x_norm[W-1:W-4]];
           st  <= S_IT0;
@@ -145,7 +146,8 @@ endfunction
 
         // Iteration: y = y * (2 - x_norm*y)
         // All sizes are QF
-        S_IT0, S_IT1, S_IT2, S_IT3: begin
+        S_IT0, S_IT1, S_IT2, S_IT3: 
+        begin
           xy <= x_norm * y;           // QF*QF
           // (x*y)>>F  -> again QF
           tmpQF <= xy >> F;
