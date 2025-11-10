@@ -66,6 +66,7 @@ module inv_recip #(
 //endfunction
 
   logic [$clog2(W)-1:0] msb_pos;
+  logic found = 0;
   //logic [W-1:0] tmpQF;
   logic [W-1:0] TWO_QF = 2**(F+1); // 2.0 in QF
 
@@ -77,10 +78,10 @@ module inv_recip #(
     msb_pos = 0; // default value
     for (int i = W-1; i >= 0; i--) 
     begin
-    if (x_abs[i]) 
+    if (x_abs[i] && !found) 
     begin
       msb_pos = i;
-      break; // exit loop early when first '1' is found from MSB
+      found = 1; // exit loop early when first '1' is found from MSB
     end
   end
   // If x_abs is zero, msb_pos will be 0 (or adjust as needed)
