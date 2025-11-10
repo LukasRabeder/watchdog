@@ -20,9 +20,12 @@ module cordic_sqrt #(
   logic neg_flag;
   logic [IN_WIDTH-1:0] radicand;
   logic [IN_WIDTH-1:0] shreg;
+  logic [1:0] bring2 = shreg[IN_WIDTH-1:IN_WIDTH-2];
   logic [OUT_WIDTH*2-1:0] remind;
   logic [OUT_WIDTH-1:0] root;
   integer iter;
+  logic [OUT_WIDTH*2-1:0] rem_next;
+  logic [OUT_WIDTH:0] trial;
 
   always_comb begin
     y_out = root;
@@ -63,14 +66,13 @@ module cordic_sqrt #(
 
         RUN: begin
           // Take the two most significant bits, then shift left
-          logic [1:0] bring2 = shreg[IN_WIDTH-1:IN_WIDTH-2];
           shreg <= {shreg[IN_WIDTH-3:0], 2'b00};
 
           // rem = (rem << 2) | bring_down_two_bits
-          logic [OUT_WIDTH*2-1:0] rem_next = {remind[OUT_WIDTH*2-3:0], bring2};
+          rem_next <= {remind[OUT_WIDTH*2-3:0], bring2};
 
           // trial = (root << 1) | 1
-          logic [OUT_WIDTH:0] trial = {root, 1'b0} + 1'b1;
+          trial <= {root, 1'b0} + 1'b1;
 
           if (rem_next >= trial) begin
             // Subtract and append '1' to root
