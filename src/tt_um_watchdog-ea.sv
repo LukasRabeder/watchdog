@@ -94,7 +94,7 @@ always_ff @(posedge clk or negedge rst_n) begin
   begin 
       eig_core_start <= 1'b1;
       core_busy_ <= 1'b0;
-      ol_busy <= 1b'b0;
+      ol_busy <= 1'b0;
   end
   else
   begin
