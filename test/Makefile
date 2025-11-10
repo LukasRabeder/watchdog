@@ -3,14 +3,15 @@
 
 # defaults
 SIM ?= icarus
-TOPLEVEL_LANG ?= verilog
+TOPLEVEL_LANG ?= systemverilog
 SRC_DIR = $(PWD)/../src/
-PROJECT_SOURCES = tt_um_watchdog-ea.v \
-                  param_loader-ea.v \
-                  eig_core_ea.v \
-                  output_loader-ea.v \
-                  cordic_sqrt_ea.v \
-                  inv_recip.v
+PROJECT_SOURCES = tt_um_watchdog-ea.sv \
+                  param_loader-ea.sv \
+                  eig_core_ea.sv \
+                  output_loader-ea.sv \
+                  cordic_sqrt_ea.sv \
+                  inv_recip.sv \
+				  watchdog_pkg.sv
 
 ifneq ($(GATES),yes)
 
