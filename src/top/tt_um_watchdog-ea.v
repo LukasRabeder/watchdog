@@ -1,4 +1,4 @@
-module watchdog (
+module tt_um_watchdog (
     input  logic clk,
     input  logic rst_n,
     input  logic [6:0] ui_in,       // User Input (7 bits)

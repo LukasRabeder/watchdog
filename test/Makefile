@@ -5,11 +5,11 @@
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../verilog/src/
-PROJECT_SOURCES = tt_um_watchdog.v \
-                  param_loader.v \
-                  eig_core.v \
-                  output_loader.v \
-                  cordic_sqrt.v \
+PROJECT_SOURCES = tt_um_watchdog-ea.v \
+                  param_loader-ea.v \
+                  eig_core_ea.v \
+                  output_loader-ea.v \
+                  cordic_sqrt_ea.v \
                   inv_recip.v
 
 ifneq ($(GATES),yes)
